@@ -1,0 +1,418 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Syne:wght@400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#09090b;--s1:#111113;--s2:#18181b;--s3:#222226;
+  --b1:#2a2a30;--b2:#3a3a45;--b3:#52525f;
+  --t1:#f4f4f6;--t2:#a1a1b0;--t3:#6b6b80;--t4:#3d3d50;
+  --mono:'JetBrains Mono',monospace;--sans:'Syne',sans-serif;
+  --n1:#ef4444;--n2:#f97316;--n3:#eab308;--n4:#22c55e;
+  --n5:#06b6d4;--n6:#a855f7;--n7:#ec4899;
+  --acc:#34d399;
+}
+body{background:var(--bg);color:var(--t1);font-family:var(--sans);font-size:13px;min-height:100vh}
+
+/* HEADER */
+.hdr{background:var(--s1);border-bottom:1px solid var(--b1);padding:18px 20px 14px;position:sticky;top:0;z-index:200}
+.hdr-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{font-family:var(--mono);font-size:11px;color:var(--acc);background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.2);padding:3px 8px;border-radius:4px;white-space:nowrap}
+.hdr h1{font-size:16px;font-weight:700;letter-spacing:-.3px}
+.hdr-meta{font-family:var(--mono);font-size:10px;color:var(--t3);margin-top:2px}
+
+.stats-row{display:flex;gap:20px;margin-top:12px;flex-wrap:wrap;align-items:center}
+.stat{display:flex;flex-direction:column;gap:1px}
+.stat-n{font-family:var(--mono);font-size:22px;font-weight:600;line-height:1}
+.stat-l{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em}
+.sdiv{width:1px;background:var(--b1);height:32px}
+
+.pbar{height:2px;background:var(--b1);margin-top:12px;border-radius:1px;overflow:hidden}
+.pbar-fill{height:100%;background:linear-gradient(90deg,var(--acc),#60a5fa);transition:width .4s}
+
+.ctrl{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;align-items:center}
+.fb{font-family:var(--mono);font-size:10px;padding:3px 9px;border-radius:3px;border:1px solid var(--b2);background:transparent;color:var(--t3);cursor:pointer;transition:all .15s;white-space:nowrap}
+.fb:hover{color:var(--t1);border-color:var(--b3)}
+.fb.on{color:var(--bg);border-color:transparent;font-weight:600}
+.eb{font-family:var(--mono);font-size:10px;padding:3px 10px;border-radius:3px;border:1px solid var(--b2);background:var(--s2);color:var(--t3);cursor:pointer;margin-left:auto;transition:all .15s}
+.eb:hover{color:var(--acc);border-color:rgba(52,211,153,.4)}
+
+/* SEARCH */
+.search-wrap{margin-top:10px}
+.search-inp{width:100%;background:var(--s2);border:1px solid var(--b2);border-radius:4px;padding:6px 10px;font-family:var(--mono);font-size:11px;color:var(--t1);outline:none;transition:border .15s}
+.search-inp:focus{border-color:rgba(52,211,153,.4)}
+.search-inp::placeholder{color:var(--t4)}
+
+/* CONTENT */
+.content{padding:16px 20px}
+
+/* JERARQUIA INFO */
+.hier-info{background:var(--s1);border:1px solid var(--b1);border-radius:6px;padding:12px 16px;margin-bottom:16px;font-size:11px;color:var(--t2);line-height:1.6}
+.hier-info strong{color:var(--t1)}
+.hier-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.hb{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:3px;font-weight:600}
+
+/* NIVEL SECTION */
+.nv{margin-bottom:24px}
+.nv-hdr{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--b1);margin-bottom:8px;cursor:pointer;user-select:none}
+.nv-hdr:hover .nv-title{color:var(--t1)}
+.nv-badge{font-family:var(--mono);font-size:9px;font-weight:600;padding:3px 8px;border-radius:3px;letter-spacing:.05em;white-space:nowrap}
+.nv-title{font-size:13px;font-weight:600;color:var(--t2);flex:1;transition:color .15s}
+.nv-info{font-family:var(--mono);font-size:10px;color:var(--t4);white-space:nowrap}
+.nv-toggle{color:var(--t4);font-size:12px;transition:transform .2s}
+.nv-toggle.open{transform:rotate(180deg)}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;border:1px solid var(--b1);border-radius:6px;overflow:hidden;font-size:12px}
+.tbl th{background:var(--s2);padding:6px 10px;text-align:left;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--t4);border-bottom:1px solid var(--b1);white-space:nowrap}
+.tbl td{padding:7px 10px;border-bottom:1px solid var(--b1);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr.hidden-row{display:none}
+.tbl tr:not(.hidden-row):hover td{background:rgba(255,255,255,.02)}
+
+.clave{font-family:var(--mono);font-size:11px;font-weight:600;white-space:nowrap}
+.nombre{font-size:12px;color:var(--t1);line-height:1.35}
+.rel{font-size:11px;color:var(--t3);line-height:1.35;max-width:240px}
+.fuente{font-size:10px;color:var(--t4);font-family:var(--mono)}
+.art{font-family:var(--mono);font-size:10px;color:var(--t4)}
+
+/* STATUS */
+.sc{display:flex;align-items:center;gap:5px;white-space:nowrap}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.d0{background:var(--b2)}
+.d-pdf{background:#f97316}
+.d-docx{background:#3b82f6}
+.d-web{background:#8b5cf6}
+.d-done{background:var(--acc)}
+.st-txt{font-family:var(--mono);font-size:10px;color:var(--t3)}
+select.fmt{background:transparent;border:none;color:var(--t3);font-family:var(--mono);font-size:10px;cursor:pointer;outline:none}
+.ck{width:14px;height:14px;accent-color:var(--acc);cursor:pointer}
+
+/* URL */
+.url-a{font-family:var(--mono);font-size:10px;color:#60a5fa;text-decoration:none;opacity:.7;transition:opacity .15s}
+.url-a:hover{opacity:1;text-decoration:underline}
+
+/* LEGEND */
+.leg{display:flex;gap:12px;flex-wrap:wrap;padding:8px 12px;background:var(--s1);border:1px solid var(--b1);border-radius:5px;margin-bottom:14px}
+.li{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--t3)}
+
+/* nota */
+.nota{background:rgba(52,211,153,.05);border:1px solid rgba(52,211,153,.15);border-radius:5px;padding:10px 14px;font-size:11px;color:var(--t2);line-height:1.55;margin-bottom:14px}
+.nota strong{color:var(--acc)}
+
+.collapsed{display:none}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-row">
+    <span class="logo">mexico-law-as-code</span>
+    <div>
+      <h1>Marco Fiscal Federal — Índice Completo</h1>
+      <div class="hdr-meta">jerarquía normativa · pirámide de Kelsen · art. 133 CPEUM · supletoriedad art. 5 CFF</div>
+    </div>
+  </div>
+  <div class="stats-row">
+    <div class="stat"><span class="stat-n" id="tot" style="color:var(--t1)">0</span><span class="stat-l">Total</span></div>
+    <div class="sdiv"></div>
+    <div class="stat"><span class="stat-n" id="proc" style="color:var(--acc)">0</span><span class="stat-l">Procesadas</span></div>
+    <div class="sdiv"></div>
+    <div class="stat"><span class="stat-n" id="dl" style="color:#60a5fa">0</span><span class="stat-l">Descargadas</span></div>
+    <div class="sdiv"></div>
+    <div class="stat"><span class="stat-n" id="pend" style="color:var(--t4)">0</span><span class="stat-l">Pendientes</span></div>
+  </div>
+  <div class="pbar"><div class="pbar-fill" id="pb" style="width:0"></div></div>
+  <div class="ctrl">
+    <button class="fb on" onclick="fil(0,this)">Todas</button>
+    <button class="fb" onclick="fil(1,this)">I · Constitución</button>
+    <button class="fb" onclick="fil(2,this)">II · Tratados</button>
+    <button class="fb" onclick="fil(3,this)">III · Cód. Marco</button>
+    <button class="fb" onclick="fil(4,this)">IV · Leyes directas</button>
+    <button class="fb" onclick="fil(5,this)">V · Impacto indirecto</button>
+    <button class="fb" onclick="fil(6,this)">VI · Reglamentos</button>
+    <button class="fb" onclick="fil(7,this)">VII · Disposiciones</button>
+    <button class="eb" onclick="exportMD()">↓ .md</button>
+  </div>
+  <div class="search-wrap">
+    <input class="search-inp" id="srch" placeholder="Buscar por clave, nombre o relevancia..." oninput="buscar(this.value)">
+  </div>
+</div>
+
+<div class="content">
+
+<div class="nota">
+  <strong>Supletoriedad en cascada (Art. 5 CFF):</strong> Ley especial → CFF → Derecho federal común (CCF, CCom) → Constitución. Una norma inferior no puede contradecir a una superior, y una ley especial prevalece sobre la general en su materia. La jurisprudencia de la SCJN es vinculante en la interpretación de todos los niveles.
+</div>
+
+<div class="leg">
+  <div class="li"><span class="dot d0"></span>Sin descargar</div>
+  <div class="li"><span class="dot d-pdf"></span>PDF</div>
+  <div class="li"><span class="dot d-docx"></span>DOCX</div>
+  <div class="li"><span class="dot d-web"></span>Web/API</div>
+  <div class="li"><span class="dot d-done"></span>Procesado ✓</div>
+</div>
+
+<div id="tc"></div>
+</div>
+
+<script>
+const NV=[
+{n:1,nom:"Constitución Política",sub:"Norma suprema — Art. 133 CPEUM",color:"#ef4444",
+ desc:"Todo el sistema fiscal emana de aquí. Arts. clave: 31-IV (obligación de contribuir), 73-VII y VIII (facultades del Congreso en materia fiscal), 74-IV (LIF), 115-IV (hacienda municipal), 117-118 (prohibiciones a estados), 131 (comercio exterior), 133 (jerarquía normativa).",
+ leyes:[
+  {c:"CPEUM",n:"Constitución Política de los Estados Unidos Mexicanos",r:"Arts. 31-IV: obligación de contribuir. 73-VII: facultad legislativa fiscal. 74-IV: LIF. 115-IV: hacienda municipal. 117-118: prohibiciones a estados. 131: comercio exterior. 133: jerarquía normativa y tratados.",arts:"31-IV, 73, 74-IV, 115, 131, 133",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/CPEUM.pdf",fuente:"diputados.gob.mx"}
+]},
+
+{n:2,nom:"Tratados Internacionales",sub:"Art. 133 CPEUM · rango supralegal en materia fiscal",color:"#f97316",
+ desc:"En materia fiscal, los tratados ratificados por el Senado tienen jerarquía supralegal: prevalecen sobre leyes federales ordinarias cuando hay conflicto. Incluye CDTs (México tiene 80+ convenios), acuerdos de intercambio de información y tratados comerciales con implicaciones fiscales.",
+ leyes:[
+  {c:"T-MEC",n:"Tratado entre México, EUA y Canadá (T-MEC/USMCA)",r:"Reglas de origen, aranceles preferenciales, comercio digital, inversión. Capítulos 2, 15, 28 y 32 con impacto fiscal directo.",arts:"Caps. 2, 15, 28, 32",url:"https://www.gob.mx/t-mec",fuente:"gob.mx"},
+  {c:"CDT-USA",n:"Convenio para Evitar la Doble Tributación México–EUA (1992)",r:"Residencia fiscal, establecimiento permanente, tasas reducidas de retención (0-10-15%). El más invocado ante el SAT.",arts:"Arts. 1-30",url:"https://www.sat.gob.mx/tramites/16827/convenios-para-evitar-la-doble-imposicion",fuente:"SAT"},
+  {c:"CDT-ESP",n:"Convenio para Evitar la Doble Tributación México–España",r:"Retenciones sobre dividendos (0-5-10%), intereses y regalías. Muy relevante para grupos empresariales hispanomexicanos.",arts:"Arts. 1-29",url:"https://www.sat.gob.mx/tramites/16827/convenios-para-evitar-la-doble-imposicion",fuente:"SAT"},
+  {c:"CDT-CAN",n:"Convenio para Evitar la Doble Tributación México–Canadá",r:"Minería, recursos naturales, inversión directa. Trato especial a fideicomisos y fondos de pensiones.",arts:"Arts. 1-30",url:"https://www.sat.gob.mx/tramites/16827/convenios-para-evitar-la-doble-imposicion",fuente:"SAT"},
+  {c:"CDT-ALE",n:"Convenio para Evitar la Doble Tributación México–Alemania",r:"Manufactura avanzada, maquiladoras, regalías tecnológicas. Relevante para inversión alemana en sector automotriz.",arts:"Arts. 1-29",url:"https://www.sat.gob.mx/tramites/16827/convenios-para-evitar-la-doble-imposicion",fuente:"SAT"},
+  {c:"CDT-PAISES+",n:"Otros CDTs vigentes (75+ convenios adicionales)",r:"México tiene convenios con: Países Bajos, Francia, Reino Unido, Japón, China, Suiza, Italia, Corea, Singapore, Brasil, Chile, Argentina, Colombia, entre otros.",arts:"Catálogo SAT",url:"https://www.sat.gob.mx/tramites/16827/convenios-para-evitar-la-doble-imposicion",fuente:"SAT"},
+  {c:"FATCA",n:"Acuerdo FATCA México–EUA (Foreign Account Tax Compliance Act)",r:"Intercambio automático de información financiera de residentes fiscales de EUA en México. Obligaciones a instituciones financieras mexicanas.",arts:"Acuerdo 2014",url:"https://www.sat.gob.mx",fuente:"SAT"},
+  {c:"CRS-OCDE",n:"Estándar Común de Reporte CRS (Common Reporting Standard) OCDE",r:"Intercambio automático multilateral de información financiera entre 100+ países. Implementado en México vía CFF arts. 32-B Bis, 32-B Ter.",arts:"CFF 32-B Bis",url:"https://www.oecd.org/tax/automatic-exchange/",fuente:"OCDE"},
+  {c:"BEPS",n:"Plan de Acción BEPS OCDE (Base Erosion & Profit Shifting — 15 acciones)",r:"Pilares 1 y 2 en implementación. Acción 5 = CFF art. 5-A (razón de negocios). Acción 13 = LISR art. 76-A (CbCR). Acción 15 = Convenio multilateral (MLI).",arts:"CFF 5-A, LISR 76-A",url:"https://www.oecd.org/tax/beps/",fuente:"OCDE"},
+  {c:"MLI",n:"Instrumento Multilateral OCDE (Convenio Multilateral BEPS Acción 15)",r:"Modifica simultáneamente los CDTs existentes para incorporar estándares mínimos BEPS. México lo ratificó en 2022.",arts:"MLI 2022",url:"https://www.oecd.org/tax/treaties/multilateral-instrument-beps-tax-treaty.htm",fuente:"OCDE"},
+  {c:"SCT-CFDI",n:"Tratados sobre intercambio de información fiscal (TIEAS)",r:"Acuerdos de intercambio de información bajo demanda con jurisdicciones que no tienen CDT. Habilita auditorías internacionales del SAT.",arts:"CFF 69-B",url:"https://www.sat.gob.mx",fuente:"SAT"}
+]},
+
+{n:3,nom:"Código Marco Fiscal",sub:"CFF — eje del sistema tributario federal · supletorio de todas las leyes fiscales",color:"#eab308",
+ desc:"El CFF ocupa una posición única: es ley federal ordinaria en jerarquía, pero funciona como código marco que aplica supletoriamente a todas las demás leyes fiscales (art. 1 CFF). Sus procedimientos, plazos, conceptos y medios de defensa son el piso común de todo el sistema.",
+ leyes:[
+  {c:"CFF",n:"Código Fiscal de la Federación",r:"Define contribuciones, obligaciones, facultades del SAT, procedimientos de auditoría, medios de defensa (recursos, juicio contencioso), delitos fiscales, prescripción y caducidad. Art. 5: supletoriedad al derecho federal común.",arts:"1-263",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/CFF.pdf",fuente:"diputados.gob.mx"},
+  {c:"CPF-Fiscal",n:"Código Penal Federal — Título XXVII Delitos Fiscales",r:"Arts. 108-115A: delincuencia organizada fiscal, defraudación fiscal, contrabando, expedición de comprobantes falsos (EFOS/EDOS). Referenciado directamente por el CFF.",arts:"108-115-A CPF",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/CPF.pdf",fuente:"diputados.gob.mx"},
+  {c:"LFDC",n:"Ley Federal de los Derechos del Contribuyente",r:"Garantías del contribuyente frente al SAT: visitas domiciliarias, revisiones electrónicas, acuerdos conclusivos (art. 69-C CFF), negativa ficta y afirmativa ficta.",arts:"1-23",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LFDC.pdf",fuente:"diputados.gob.mx"}
+]},
+
+{n:4,nom:"Leyes Fiscales Especiales",sub:"Crean y regulan contribuciones específicas — prevalecen sobre CFF en su materia",color:"#22c55e",
+ desc:"Leyes que crean contribuciones concretas (ISR, IVA, IEPS, aranceles, derechos, etc.) o regulan instrumentos del sistema fiscal (coordinación, presupuesto, ingresos). En su materia específica, prevalecen sobre el CFF. El CFF solo aplica en lo que no regulen.",
+ leyes:[
+  {c:"LISR",n:"Ley del Impuesto sobre la Renta",r:"ISR personas físicas y morales: ingresos acumulables, deducciones, regímenes especiales (RESICO, RIF, coordinados), precios de transferencia (arts. 76, 179-184), establecimiento permanente, REFIPRES, FIBRAS, CKDs.",arts:"1-206",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LISR.pdf",fuente:"diputados.gob.mx"},
+  {c:"LIVA",n:"Ley del Impuesto al Valor Agregado",r:"IVA: enajenación, prestación de servicios, uso/goce temporal, importación. Tasa 16% general, 0% exportaciones y alimentos. Acreditamiento, devolución de saldos a favor.",arts:"1-43",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LIVA.pdf",fuente:"diputados.gob.mx"},
+  {c:"LIEPS",n:"Ley del Impuesto Especial sobre Producción y Servicios",r:"IEPS: combustibles, bebidas alcohólicas, tabaco, alimentos de alta densidad calórica, bebidas azucaradas, telecomunicaciones, plaguicidas, juegos y sorteos.",arts:"1-21",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LIEPS.pdf",fuente:"diputados.gob.mx"},
+  {c:"LA",n:"Ley Aduanera",r:"Importación/exportación: pedimentos, agentes aduanales, regímenes aduaneros (temporal, depósito fiscal, IMMEX), reconocimiento aduanero, infracciones y sanciones.",arts:"1-205",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LA.pdf",fuente:"diputados.gob.mx"},
+  {c:"LIGIE",n:"Ley de Impuestos Generales de Importación y Exportación (Tarifa TIGIE)",r:"Tarifa arancelaria completa. Define fracción arancelaria de cada mercancía y su tasa de arancel. Se actualiza frecuentemente por Decretos del Ejecutivo.",arts:"Art. 1 (Tarifa)",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LIGIE.pdf",fuente:"diputados.gob.mx"},
+  {c:"LCE",n:"Ley de Comercio Exterior",r:"Regulación no arancelaria: cuotas compensatorias, permisos previos, salvaguardas, antidumping. Complementa LIGIE para determinar obligaciones en importación.",arts:"1-97",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LCE.pdf",fuente:"diputados.gob.mx"},
+  {c:"LFD",n:"Ley Federal de Derechos",r:"Derechos por uso de bienes del dominio público y servicios del Estado: IMPI, SEMARNAT, SCT, hidrocarburos (DEPEBI), minería, agua, migración, aviación.",arts:"1-289",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LFD.pdf",fuente:"diputados.gob.mx"},
+  {c:"LCMOPFIH",n:"Ley de Contribuciones de Mejoras por Obras Públicas Federales de Infraestructura Hidráulica",r:"Contribución de mejoras para beneficiarios directos de obras hidráulicas federales. Única ley de contribución de mejoras a nivel federal.",arts:"1-31",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LCMOPFIH.pdf",fuente:"diputados.gob.mx"},
+  {c:"LISAN",n:"Ley Federal del Impuesto sobre Automóviles Nuevos",r:"ISAN: impuesto al precio de venta de automóviles nuevos al consumidor. Cuotas actualizadas anualmente por RMF. Relevante para distribuidores e importadores.",arts:"1-14",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LISAN.pdf",fuente:"diputados.gob.mx"},
+  {c:"LISH",n:"Ley de Ingresos sobre Hidrocarburos",r:"Régimen fiscal especial de PEMEX y empresas petroleras: derecho de exploración, extracción, DEPEBI. Cuotas actualizadas por RMF.",arts:"1-73",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LISH.pdf",fuente:"diputados.gob.mx"},
+  {c:"LIF-2026",n:"Ley de Ingresos de la Federación 2026",r:"Estimados de recaudación por impuesto. Tasas de recargos vigentes (art. 11). Estímulos fiscales anuales. Vigencia anual — sin publicación en LIF, un impuesto no tiene vigencia ese ejercicio.",arts:"1-16 + Transitorios",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LIF_2026.pdf",fuente:"diputados.gob.mx"},
+  {c:"LCF",n:"Ley de Coordinación Fiscal",r:"Sistema Nacional de Coordinación Fiscal. Participaciones (ramo 28) y aportaciones (ramo 33) a estados y municipios. Base del federalismo fiscal.",arts:"1-54",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LCF.pdf",fuente:"diputados.gob.mx"},
+  {c:"LDFEFM",n:"Ley de Disciplina Financiera de las Entidades Federativas y Municipios",r:"Regula endeudamiento, balance presupuestario y responsabilidad fiscal de estados y municipios. Complementa LCF.",arts:"1-70",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LDFEFM.pdf",fuente:"diputados.gob.mx"},
+  {c:"LFPRH",n:"Ley Federal de Presupuesto y Responsabilidad Hacendaria",r:"Marco del gasto público federal: balance presupuestario, regla fiscal, techo de deuda. Complementa LIF en el ciclo ingresos-gastos.",arts:"1-114",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LFPRH.pdf",fuente:"diputados.gob.mx"},
+  {c:"PEF-2026",n:"Presupuesto de Egresos de la Federación 2026",r:"Decreto exclusivo de la Cámara de Diputados. Define el gasto. Contiene estímulos y subsidios con impacto fiscal. Complemento obligatorio de LIF.",arts:"Decreto + Anexos",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/PEF_2026.pdf",fuente:"diputados.gob.mx"},
+  {c:"LFPCA",n:"Ley Federal de Procedimiento Contencioso Administrativo",r:"Proceso ante el TFJA: demanda, contestación, pruebas, cierre de instrucción, sentencia, recurso de revisión fiscal ante TCC. Medio de defensa principal contra el SAT.",arts:"1-73",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LFPCA.pdf",fuente:"diputados.gob.mx"},
+  {c:"LFPA",n:"Ley Federal de Procedimiento Administrativo",r:"Procedimiento general de actos administrativos. Supletoria del CFF en lo que éste no regule sobre notificaciones, términos, recursos administrativos.",arts:"1-99",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LFPA.pdf",fuente:"diputados.gob.mx"},
+  {c:"LSAT",n:"Ley del Servicio de Administración Tributaria",r:"Naturaleza jurídica, estructura orgánica y atribuciones del SAT como órgano desconcentrado de la SHCP. Define quién puede auditar y sancionar.",arts:"1-31",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LSAT.pdf",fuente:"diputados.gob.mx"},
+  {c:"LFEA",n:"Ley de Firma Electrónica Avanzada",r:"Marco legal de la e.firma (FIEL): validez, certificados, prestadores de servicios de certificación. Base de todo el cumplimiento fiscal digital.",arts:"1-38",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LFEA.pdf",fuente:"diputados.gob.mx"},
+  {c:"LOAPF",n:"Ley Orgánica de la Administración Pública Federal",r:"Define las atribuciones de la SHCP (art. 31) en materia fiscal, presupuestal y de deuda pública. Establece quién puede emitir reglas en materia hacendaria.",arts:"31, 37",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LOAPF.pdf",fuente:"diputados.gob.mx"},
+  {c:"LFPIORPI",n:"Ley Federal para la Prevención e Identificación de Operaciones con Recursos de Procedencia Ilícita",r:"Antilavado: actividades vulnerables, avisos al SAT/UIF, restricción de pagos en efectivo, obligaciones de fedatarios y contadores. Clave para cumplimiento fiscal.",arts:"1-61",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LFPIORPI.pdf",fuente:"diputados.gob.mx"},
+  {c:"LAAYP",n:"Ley de Ayuda Alimentaria para los Trabajadores",r:"Vales de despensa y comida: deducibles en ISR bajo ciertos límites. Exentos de ISR para trabajadores. Regulación de proveedores de servicios de alimentación.",arts:"1-26",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LAAYP.pdf",fuente:"diputados.gob.mx"},
+  {c:"LANTB",n:"Ley Nacional para Eliminar Trámites Burocráticos",r:"Reduce trámites fiscales-administrativos. Establece silencio administrativo positivo. Impacta tiempos de respuesta del SAT y ventanillas únicas.",arts:"1-70 aprox.",url:"https://www.diputados.gob.mx/LeyesBiblio/index.htm",fuente:"diputados.gob.mx"}
+]},
+
+{n:5,nom:"Leyes con Impacto Fiscal Indirecto",sub:"Derecho Federal Común — supletorio del CFF por art. 5 · generan obligaciones o bases gravables",color:"#06b6d4",
+ desc:"No crean impuestos, pero determinan qué actos son gravables, cómo se calculan bases y quiénes son sujetos. El Art. 5 CFF establece que el 'derecho federal común' (CCF, CCom, etc.) aplica supletoriamente cuando no existe norma fiscal expresa. Ignorar estas leyes genera errores en la base gravable.",
+ leyes:[
+  {c:"CCF",n:"Código Civil Federal",r:"Supletorio directo del CFF por art. 5. Regula obligaciones, contratos, prescripción, persona moral, propiedad. Esencial para definir enajenación, arrendamiento, donación en materia fiscal.",arts:"1-3074",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/CCF.pdf",fuente:"diputados.gob.mx"},
+  {c:"CCom",n:"Código de Comercio",r:"Define actos de comercio que son objeto de ISR e IVA. Contabilidad mercantil. Plazos de prescripción mercantil. Obligaciones de los comerciantes.",arts:"1-1457",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/CCom.pdf",fuente:"diputados.gob.mx"},
+  {c:"LGSM",n:"Ley General de Sociedades Mercantiles",r:"SA, SRL, SC, asociación en participación. Fusiones (ISR art. 14-B), escisiones (LISR art. 14-B), liquidación y sus efectos fiscales. Define la figura jurídica que determina el régimen ISR.",arts:"1-264",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LGSM.pdf",fuente:"diputados.gob.mx"},
+  {c:"LGTOC",n:"Ley General de Títulos y Operaciones de Crédito",r:"Pagarés, cheques, letras de cambio, facturas electrónicas (CFDI como título). Créditos documentarios. Tratamiento fiscal de instrumentos financieros.",arts:"1-530",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LGTOC.pdf",fuente:"diputados.gob.mx"},
+  {c:"LSS",n:"Ley del Seguro Social",r:"Cuotas IMSS: base de cotización (salario diario integrado), obligaciones patronales. Aportaciones deducibles en ISR (art. 25 LISR). SBC determina retención ISR.",arts:"1-307",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LSS.pdf",fuente:"diputados.gob.mx"},
+  {c:"LINFONAVIT",n:"Ley del Instituto del Fondo Nacional de la Vivienda para los Trabajadores",r:"Aportaciones INFONAVIT 5% sobre SBC: deducibles para el patrón. Créditos de vivienda: retenciones sobre nómina, exenciones ISR de intereses.",arts:"1-100",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LINFONAVIT.pdf",fuente:"diputados.gob.mx"},
+  {c:"LISSSTE",n:"Ley del Instituto de Seguridad y Servicios Sociales de los Trabajadores del Estado",r:"Cuotas y aportaciones de trabajadores del sector público. Régimen de pensiones con tratamiento ISR diferenciado. Prescripción de 10 años vs. 5 del CFF.",arts:"1-251",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LISSSTE.pdf",fuente:"diputados.gob.mx"},
+  {c:"LFT",n:"Ley Federal del Trabajo",r:"PTU 10% sobre utilidad fiscal (art. 9 LISR). Salario base de cotización. Liquidaciones: exenciones ISR art. 93-XIII. Horas extra: exenciones. Determina qué pagos son deducibles de nómina.",arts:"1-1010",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf",fuente:"diputados.gob.mx"},
+  {c:"LIC",n:"Ley de Instituciones de Crédito",r:"Obligaciones de retención de bancos (intereses, dividendos). Secreto bancario vs. facultades del SAT (art. 32-B CFF). SPEI y transferencias: trazabilidad fiscal.",arts:"1-175",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LIC.pdf",fuente:"diputados.gob.mx"},
+  {c:"LMV",n:"Ley del Mercado de Valores",r:"FIBRAS, CKDs, fondos de inversión bursátil. Tratamiento ISR de ganancias de capital en bolsa (art. 129 LISR). Emisoras: obligaciones informativas fiscales.",arts:"1-393",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LMV.pdf",fuente:"diputados.gob.mx"},
+  {c:"LFIF",n:"Ley de Fondos de Inversión",r:"Régimen fiscal especial de fondos: retenciones, ganancias de capital, DECS, tasas diferenciadas. Complementa LISR art. 87-90 para personas físicas inversionistas.",arts:"1-116",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LFIF.pdf",fuente:"diputados.gob.mx"},
+  {c:"LIE",n:"Ley de Inversión Extranjera",r:"Restricciones a participación extranjera: impacta estructura jurídica y régimen fiscal de holdings. Relevante para precios de transferencia y establecimientos permanentes.",arts:"1-39",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LIE.pdf",fuente:"diputados.gob.mx"},
+  {c:"LM",n:"Ley Minera",r:"Derechos sobre minería (LFD arts. 268-269): derecho especial sobre minería 7.5%, derecho extraordinario 0.5%. Concesiones mineras y su régimen de amortización ISR.",arts:"1-74",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LM.pdf",fuente:"diputados.gob.mx"},
+  {c:"LH",n:"Ley de Hidrocarburos",r:"Marco para contratos de exploración y extracción. Régimen fiscal complementario a LISH. Determina forma jurídica de operadores petroleros.",arts:"1-100",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LH.pdf",fuente:"diputados.gob.mx"},
+  {c:"LFTR",n:"Ley Federal de Telecomunicaciones y Radiodifusión",r:"Servicios de telecomunicaciones: objeto del IEPS (art. 2-II-c LIEPS). Concesiones y permisos con derechos (LFD). Plataformas digitales: reglas de IVA y ISR RMF.",arts:"Caps. relevantes",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LFTR.pdf",fuente:"diputados.gob.mx"},
+  {c:"LCM",n:"Ley de Concursos Mercantiles",r:"Quiebras: créditos fiscales preferentes (art. 224 LCM). Reconocimiento de créditos del SAT en masa concursal. Suspensión de PAE durante concurso.",arts:"1-290",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LCM.pdf",fuente:"diputados.gob.mx"},
+  {c:"LA-Amparo",n:"Ley de Amparo Reglamentaria de los Arts. 103 y 107 CPEUM",r:"Medio de defensa constitucional: amparo directo e indirecto contra actos del SAT, TFJA y cualquier autoridad fiscal. Suspensión del PAE mediante amparo.",arts:"1-261",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LA_150621.pdf",fuente:"diputados.gob.mx"},
+  {c:"LOTFJA",n:"Ley Orgánica del Tribunal Federal de Justicia Administrativa",r:"Estructura y competencia del TFJA. Define juzgadores del juicio contencioso. Salas especializadas en materia fiscal.",arts:"1-80",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LOTFJA.pdf",fuente:"diputados.gob.mx"},
+  {c:"LNotFed",n:"Ley del Notariado para el Distrito Federal / Ley del Notariado Federal",r:"Fedatarios: obligaciones de información al SAT (art. 27 CFF, declaraciones notariales). ISR en enajenación de inmuebles vía notario.",arts:"Arts. relevantes",url:"https://www.diputados.gob.mx/LeyesBiblio/index.htm",fuente:"diputados.gob.mx"},
+  {c:"LGSF",n:"Ley General del Sistema Financiero (LGIF/LGAF/LSAD)",r:"Marco de instituciones financieras auxiliares: SOFOM, SOFOL, UDIS. Régimen de intereses y retenciones ISR/IVA en operaciones financieras.",arts:"Arts. relevantes",url:"https://www.diputados.gob.mx/LeyesBiblio/index.htm",fuente:"diputados.gob.mx"},
+  {c:"LGCG",n:"Ley General de Contabilidad Gubernamental",r:"Normas de contabilidad para entes públicos: base para determinar obligaciones fiscales de entidades de gobierno que realizan actividades gravables.",arts:"1-89",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LGCG.pdf",fuente:"diputados.gob.mx"},
+  {c:"LMIG",n:"Ley de Migración",r:"Visas de trabajo e inversión con implicaciones de residencia fiscal. SAT usa datos migratorios para verificar residencia (art. 9 CFF). Derechos de migración (LFD).",arts:"Arts. relevantes",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LM.pdf",fuente:"diputados.gob.mx"}
+]},
+
+{n:6,nom:"Reglamentos",sub:"Poder Ejecutivo (Art. 89-I CPEUM) · detallan y operativizan las leyes",color:"#a855f7",
+ desc:"Emitidos por el Presidente de la República. No pueden contrariar la ley que reglamentan ni crear elementos esenciales de contribuciones (objeto, sujeto, base, tasa). Si lo hacen, son inconstitucionales. En la práctica definen plazos, formatos, requisitos y procedimientos operativos.",
+ leyes:[
+  {c:"RCFF",n:"Reglamento del Código Fiscal de la Federación",r:"Detalla: plazos de conservación de contabilidad, formato de libros, procedimientos de notificación, requisitos de comprobantes, dictámenes fiscales (SIPRED/DISIF).",arts:"1-100",url:"https://www.diputados.gob.mx/LeyesBiblio/regla/n/RCFF.pdf",fuente:"diputados.gob.mx"},
+  {c:"RLISR",n:"Reglamento de la Ley del Impuesto sobre la Renta",r:"Deducciones específicas, activos fijos (tasas de depreciación), gastos de previsión social, salarios y asimilados, conceptos de casa habitación, enajenación de inmuebles.",arts:"1-260",url:"https://www.diputados.gob.mx/LeyesBiblio/regla/n/RISR.pdf",fuente:"diputados.gob.mx"},
+  {c:"RLIVA",n:"Reglamento de la Ley del Impuesto al Valor Agregado",r:"Acreditamiento proporcional (prorrata), devoluciones, operaciones con extranjeros, IVA en importaciones temporales, retenciones de IVA.",arts:"1-75",url:"https://www.diputados.gob.mx/LeyesBiblio/regla/n/RIVA.pdf",fuente:"diputados.gob.mx"},
+  {c:"RLIEPS",n:"Reglamento de la Ley del IEPS",r:"Marbetes y precintos (bebidas alcohólicas, tabaco), cuotas actualizadas, zona fronteriza, importación y exportación de bienes gravados.",arts:"1-44",url:"https://www.diputados.gob.mx/LeyesBiblio/regla/n/RIEPS.pdf",fuente:"diputados.gob.mx"},
+  {c:"RLA",n:"Reglamento de la Ley Aduanera",r:"Despacho aduanero, patentes de agente aduanal, regímenes de importación temporal y definitiva, dictamen aduanero, depósito fiscal.",arts:"1-220",url:"https://www.diputados.gob.mx/LeyesBiblio/regla/n/RLA.pdf",fuente:"diputados.gob.mx"},
+  {c:"RLCE",n:"Reglamento de la Ley de Comercio Exterior",r:"Procedimientos antidumping y cuotas compensatorias, certificados de origen, normas oficiales vinculadas a aranceles.",arts:"1-170",url:"https://www.diputados.gob.mx/LeyesBiblio/regla/n/RLCE.pdf",fuente:"diputados.gob.mx"},
+  {c:"RLSS",n:"Reglamento de la Ley del Seguro Social (Afiliación y Vigencia de Derechos)",r:"Registro patronal, formas de determinar SBC, avisos al IMSS (altas, bajas, modificaciones), SUA.",arts:"1-196",url:"https://www.imss.gob.mx/sites/all/statics/pdf/leyes/RSeguroSocial.pdf",fuente:"IMSS"},
+  {c:"RLFT-PTU",n:"Reglamento Arts. 121 y 122 LFT (Reparto de Utilidades / PTU)",r:"Procedimiento para determinar renta gravable PTU, plazos de pago (mayo/junio PF y PM), objeciones sindicales, cálculo de días trabajados.",arts:"Reglamento específico",url:"https://www.diputados.gob.mx/LeyesBiblio/regla/n/RLFT_PTU.pdf",fuente:"diputados.gob.mx"},
+  {c:"RISAT",n:"Reglamento Interior del Servicio de Administración Tributaria",r:"Estructura interna del SAT: adscripción de unidades, competencia territorial de AGSC, AGGC, AEAT. Fundamental para identificar autoridad competente en cada acto.",arts:"1-80 aprox.",url:"https://www.sat.gob.mx",fuente:"SAT"},
+  {c:"RLFPIORPI",n:"Reglamento de la Ley Federal para la Prevención e Identificación de Operaciones con Recursos de Procedencia Ilícita",r:"Procedimientos de avisos al SAT/UIF, umbrales de efectivo, obligaciones de verificación de identidad para actividades vulnerables.",arts:"1-40 aprox.",url:"https://www.diputados.gob.mx/LeyesBiblio/regla/n/RLFPIORPI.pdf",fuente:"diputados.gob.mx"}
+]},
+
+{n:7,nom:"Disposiciones Administrativas, Decretos y Jurisprudencia",sub:"SAT / SHCP / Ejecutivo / SCJN · aplicación práctica y criterios interpretativos",color:"#ec4899",
+ desc:"El nivel más dinámico del sistema. Las disposiciones del SAT son obligatorias para sus funcionarios pero crean derechos para los contribuyentes cuando se publican en el DOF (art. 35 CFF). La jurisprudencia de la SCJN es técnicamente interpretativa pero de observancia obligatoria para todos los tribunales.",
+ leyes:[
+  {c:"RMF-2026",n:"Resolución Miscelánea Fiscal 2026 (y sus Anexos 1-42)",r:"Reglas de operación anual: CFDI 4.0, buzón tributario, fichas de trámite SAT, facilidades administrativas, condonaciones, acuerdos conclusivos. El SAT 'legisla' aquí de facto.",arts:"Libros 1-6 + 42 Anexos",url:"https://www.sat.gob.mx/consulta/65880/conoce-la-resolucion-miscelanea-fiscal",fuente:"SAT"},
+  {c:"RGCE-2026",n:"Reglas Generales de Comercio Exterior 2026",r:"Equivalente a la RMF pero para materia aduanera: VUCEM, pedimentos, certificados de origen, IMMEX, reglas de depósito fiscal.",arts:"Libros 1-8",url:"https://www.sat.gob.mx",fuente:"SAT"},
+  {c:"RFA-2026",n:"Resolución de Facilidades Administrativas 2026 (Sector Primario)",r:"Facilidades específicas para sector agropecuario, silvícola y pesquero: comprobantes simplificados, deducción ciega 8%, exenciones ISR para pequeños agricultores.",arts:"Reglas 1-8",url:"https://www.sat.gob.mx",fuente:"SAT"},
+  {c:"CN-SAT",n:"Criterios Normativos del SAT (Anexo 7 de la RMF)",r:"Criterios vinculativos de interpretación para funcionarios del SAT. No obligan al contribuyente pero predicen el criterio del SAT en auditorías. Publicados en DOF.",arts:"Anexo 7 RMF",url:"https://www.sat.gob.mx/consulta/65880/conoce-la-resolucion-miscelanea-fiscal",fuente:"SAT"},
+  {c:"CNV-SAT",n:"Criterios No Vinculativos del SAT (Anexo 3 de la RMF)",r:"Prácticas que el SAT considera indebidas (planeaciones fiscales agresivas). Orientan auditorías. Evitarlos reduce riesgo. Su realización puede implicar sanciones.",arts:"Anexo 3 RMF",url:"https://www.sat.gob.mx/consulta/65880/conoce-la-resolucion-miscelanea-fiscal",fuente:"SAT"},
+  {c:"CFDI-40",n:"Estándar CFDI 4.0 (Anexo 20 de la RMF)",r:"Especificación técnica del comprobante fiscal digital: campos obligatorios, catálogos SAT (uso CFDI, método de pago, régimen fiscal), validaciones del PAC.",arts:"Anexo 20 RMF",url:"https://www.sat.gob.mx/consulta/65880/conoce-la-resolucion-miscelanea-fiscal",fuente:"SAT"},
+  {c:"DEC-EESTF",n:"Decretos de Estímulos Fiscales del Ejecutivo Federal (vigentes)",r:"Estímulos por región (frontera norte/sur), sector (IMMEX, maquiladoras, PODECOBI, PODECIBI, Plan México), actividad (cinematografía, artes, I+D). Se publican en DOF y se reflejan en RMF.",arts:"Varios DOF",url:"https://dof.gob.mx",fuente:"DOF"},
+  {c:"ACU-SHCP",n:"Acuerdos y Circulares de la SHCP en Materia Fiscal",r:"Acuerdos de tipo de cambio, actualización de UMA, precios de gasolina para IEPS, cuotas de derechos. Publicados en DOF.",arts:"Varios DOF",url:"https://dof.gob.mx",fuente:"DOF"},
+  {c:"JUR-SCJN",n:"Jurisprudencia Fiscal de la SCJN (1ª y 2ª Salas)",r:"Máxima interpretación constitucional en materia fiscal. Vinculante para todos los tribunales. Temas clave: principios de proporcionalidad, equidad, legalidad tributaria, amparo en materia fiscal.",arts:"SJF Digital",url:"https://sjf2.scjn.gob.mx/busqueda-principal-tesis",fuente:"SCJN"},
+  {c:"JUR-TFJA",n:"Jurisprudencia del Tribunal Federal de Justicia Administrativa",r:"Criterios jurisdiccionales en materia fiscal-administrativa. Precedentes de sala superior. Esencial para argumentación en juicio contencioso y respuestas al SAT.",arts:"TFJA Digital",url:"https://www.tfja.gob.mx/jurisprudencia/",fuente:"TFJA"},
+  {c:"JUR-TCC",n:"Tesis de Tribunales Colegiados de Circuito en Materia Fiscal",r:"Jurisprudencia de TCC especializados en materia administrativa-fiscal. Vinculante en su circuito. Fuente para argumentos de amparo fiscal.",arts:"SJF Digital",url:"https://sjf2.scjn.gob.mx/busqueda-principal-tesis",fuente:"PJF"}
+]}
+];
+
+// State
+const ST={};
+NV.forEach(nv=>nv.leyes.forEach(l=>{ST[l.c]={fmt:'',proc:false}}));
+let cFil=0;
+
+function dotClass(fmt,proc){
+  if(proc)return 'd-done';
+  if(fmt==='PDF')return 'd-pdf';
+  if(fmt==='DOCX')return 'd-docx';
+  if(fmt==='Web')return 'd-web';
+  return 'd0';
+}
+
+function render(){
+  const tc=document.getElementById('tc');
+  const q=(document.getElementById('srch')||{}).value||'';
+  const ql=q.toLowerCase();
+  tc.innerHTML='';
+
+  NV.forEach(nv=>{
+    if(cFil!==0&&cFil!==nv.n)return;
+    const sec=document.createElement('div');
+    sec.className='nv';
+    sec.dataset.nivel=nv.n;
+
+    const proc=nv.leyes.filter(l=>ST[l.c]?.proc).length;
+    const total=nv.leyes.length;
+
+    sec.innerHTML=`
+    <div class="nv-hdr" onclick="toggleNv(${nv.n})">
+      <span class="nv-badge" style="background:${nv.color}18;color:${nv.color};border:1px solid ${nv.color}30">NV ${nv.n}</span>
+      <div style="flex:1">
+        <div class="nv-title">${nv.nom}</div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--t4);margin-top:2px">${nv.sub}</div>
+      </div>
+      <span class="nv-info">${proc}/${total}</span>
+      <span class="nv-toggle open" id="tog${nv.n}">▼</span>
+    </div>
+    <div id="body${nv.n}" style="margin-bottom:4px">
+      <div style="font-size:11px;color:var(--t3);line-height:1.5;padding:6px 2px 10px;border-bottom:1px solid var(--b1);margin-bottom:8px">${nv.desc}</div>
+      <table class="tbl">
+        <thead><tr>
+          <th>Clave</th><th>Nombre</th><th>Relevancia fiscal</th><th>Arts. clave</th><th>Fuente</th><th>Formato</th><th style="text-align:center">✓</th>
+        </tr></thead>
+        <tbody>
+          ${nv.leyes.map(l=>{
+            const match=!q||l.c.toLowerCase().includes(ql)||l.n.toLowerCase().includes(ql)||l.r.toLowerCase().includes(ql);
+            const s=ST[l.c];
+            return `<tr class="${match?'':'hidden-row'}">
+              <td><span class="clave" style="color:${nv.color}">${l.c}</span></td>
+              <td><span class="nombre">${l.n}</span></td>
+              <td><span class="rel">${l.r}</span></td>
+              <td><span class="art">${l.arts||'—'}</span></td>
+              <td>${l.url?`<a class="url-a" href="${l.url}" target="_blank">↗ ${l.fuente}</a>`:`<span class="fuente">${l.fuente||'—'}</span>`}</td>
+              <td>
+                <div class="sc">
+                  <span class="dot ${dotClass(s.fmt,s.proc)}"></span>
+                  <select class="fmt" onchange="setFmt('${l.c}',this.value)">
+                    <option value="">—</option>
+                    <option value="PDF" ${s.fmt==='PDF'?'selected':''}>PDF</option>
+                    <option value="DOCX" ${s.fmt==='DOCX'?'selected':''}>DOCX</option>
+                    <option value="Web" ${s.fmt==='Web'?'selected':''}>Web</option>
+                    <option value="N/A" ${s.fmt==='N/A'?'selected':''}>N/A</option>
+                  </select>
+                </div>
+              </td>
+              <td style="text-align:center"><input type="checkbox" class="ck" ${s.proc?'checked':''} onchange="setProc('${l.c}',this.checked)"></td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>`;
+    tc.appendChild(sec);
+  });
+  updateStats();
+}
+
+function toggleNv(n){
+  const b=document.getElementById('body'+n);
+  const t=document.getElementById('tog'+n);
+  const vis=b.style.display!=='none';
+  b.style.display=vis?'none':'block';
+  t.style.transform=vis?'rotate(-90deg)':'';
+}
+
+function setFmt(c,v){ST[c].fmt=v;render()}
+function setProc(c,v){ST[c].proc=v;updateStats()}
+function buscar(v){render()}
+
+function fil(n,btn){
+  cFil=n;
+  document.querySelectorAll('.fb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  // set color
+  const colors={1:'#ef4444',2:'#f97316',3:'#eab308',4:'#22c55e',5:'#06b6d4',6:'#a855f7',7:'#ec4899'};
+  btn.style.background=n===0?'var(--acc)':(colors[n]||'var(--acc)');
+  btn.style.color=n===0?'var(--bg)':'var(--bg)';
+  document.querySelectorAll('.fb:not(.on)').forEach(b=>{b.style.background='';b.style.color=''});
+  render();
+}
+
+function updateStats(){
+  const all=NV.flatMap(nv=>nv.leyes);
+  const tot=all.length;
+  const proc=all.filter(l=>ST[l.c]?.proc).length;
+  const dl=all.filter(l=>ST[l.c]?.fmt&&ST[l.c]?.fmt!=='').length;
+  document.getElementById('tot').textContent=tot;
+  document.getElementById('proc').textContent=proc;
+  document.getElementById('dl').textContent=dl;
+  document.getElementById('pend').textContent=tot-proc;
+  document.getElementById('pb').style.width=(proc/tot*100)+'%';
+}
+
+function exportMD(){
+  let md=`# Índice Marco Fiscal Federal — México\n\n`;
+  md+=`> Generado: ${new Date().toLocaleDateString('es-MX')} · mexico-law-as-code\n\n`;
+  md+=`## Fundamento: Jerarquía Normativa Fiscal\n\n`;
+  md+=`La jerarquía sigue el Art. 133 CPEUM y el sistema de supletoriedad del Art. 5 CFF:\n`;
+  md+=`Ley especial → CFF → Derecho federal común (CCF/CCom) → Constitución\n\n---\n\n`;
+  NV.forEach(nv=>{
+    md+=`## Nivel ${nv.n} — ${nv.nom}\n*${nv.sub}*\n\n${nv.desc}\n\n`;
+    md+=`| Clave | Nombre | Arts. clave | Relevancia | Fuente | Formato | ✓ |\n`;
+    md+=`|---|---|---|---|---|---|---|\n`;
+    nv.leyes.forEach(l=>{
+      const s=ST[l.c];
+      md+=`| \`${l.c}\` | ${l.n} | ${l.arts||'—'} | ${l.r.substring(0,80)}... | ${l.fuente} | ${s.fmt||'—'} | ${s.proc?'✓':'—'} |\n`;
+    });
+    md+='\n';
+  });
+  const b=new Blob([md],{type:'text/markdown'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(b);a.download='indice-fiscal-mexico.md';a.click();
+}
+
+render();
+</script>
+</body>
+</html>
