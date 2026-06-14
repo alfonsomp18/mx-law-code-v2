@@ -240,6 +240,26 @@
     },
 
     {
+      "id": "SCT-CFDI",
+      "nivel_jerarquico": 2,
+      "nivel_nombre": "Tratados Internacionales",
+      "clave": "SCT-CFDI",
+      "nombre_oficial": "Tratados sobre Intercambio de Información Fiscal (TIEAs)",
+      "articulos_clave": "CFF 69-B",
+      "relevancia_fiscal": "Acuerdos de intercambio de información bajo demanda con jurisdicciones que no tienen CDT. Habilita auditorías internacionales del SAT.",
+      "url_oficial": "https://www.sat.gob.mx",
+      "url_docx": "",
+      "fuente": "SAT",
+      "ultima_reforma_dof": "",
+      "fecha_descarga": "",
+      "formato_descargado": "",
+      "ruta_local": "",
+      "ruta_github": "",
+      "status": "sin_iniciar",
+      "notas": ""
+    },
+
+    {
       "id": "CFF",
       "nivel_jerarquico": 3,
       "nivel_nombre": "Código Marco Fiscal",
@@ -440,6 +460,26 @@
     },
 
     {
+      "id": "LCMOPFIH",
+      "nivel_jerarquico": 4,
+      "nivel_nombre": "Leyes Fiscales Especiales",
+      "clave": "LCMOPFIH",
+      "nombre_oficial": "Ley de Contribuciones de Mejoras por Obras Públicas Federales de Infraestructura Hidráulica",
+      "articulos_clave": "1-31",
+      "relevancia_fiscal": "Contribución de mejoras para beneficiarios directos de obras hidráulicas federales. Única ley de contribución de mejoras a nivel federal.",
+      "url_oficial": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LCMOPFIH.pdf",
+      "url_docx": "",
+      "fuente": "diputados.gob.mx",
+      "ultima_reforma_dof": "",
+      "fecha_descarga": "",
+      "formato_descargado": "",
+      "ruta_local": "",
+      "ruta_github": "",
+      "status": "sin_iniciar",
+      "notas": ""
+    },
+
+    {
       "id": "LISAN",
       "nivel_jerarquico": 4,
       "nivel_nombre": "Leyes Fiscales Especiales",
@@ -557,6 +597,26 @@
       "ruta_github": "",
       "status": "sin_iniciar",
       "notas": ""
+    },
+
+    {
+      "id": "PEF-2026",
+      "nivel_jerarquico": 4,
+      "nivel_nombre": "Leyes Fiscales Especiales",
+      "clave": "PEF-2026",
+      "nombre_oficial": "Presupuesto de Egresos de la Federación 2026",
+      "articulos_clave": "Decreto + Anexos",
+      "relevancia_fiscal": "Decreto exclusivo de la Cámara de Diputados. Define el gasto. Contiene estímulos y subsidios con impacto fiscal. Complemento obligatorio de LIF.",
+      "url_oficial": "https://www.diputados.gob.mx/LeyesBiblio/pdf/PEF_2026.pdf",
+      "url_docx": "",
+      "fuente": "diputados.gob.mx",
+      "ultima_reforma_dof": "",
+      "fecha_descarga": "",
+      "formato_descargado": "",
+      "ruta_local": "",
+      "ruta_github": "",
+      "status": "sin_iniciar",
+      "notas": "Actualizar cada año"
     },
 
     {
@@ -689,6 +749,26 @@
       "relevancia_fiscal": "Vales de despensa y comida: deducibles en ISR bajo ciertos límites. Exentos de ISR para trabajadores. Regulación de proveedores de servicios de alimentación.",
       "url_oficial": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LAAYP.pdf",
       "url_docx": "https://www.diputados.gob.mx/LeyesBiblio/doc/LAAYP.docx",
+      "fuente": "diputados.gob.mx",
+      "ultima_reforma_dof": "",
+      "fecha_descarga": "",
+      "formato_descargado": "",
+      "ruta_local": "",
+      "ruta_github": "",
+      "status": "sin_iniciar",
+      "notas": ""
+    },
+
+    {
+      "id": "LANTB",
+      "nivel_jerarquico": 4,
+      "nivel_nombre": "Leyes Fiscales Especiales",
+      "clave": "LANTB",
+      "nombre_oficial": "Ley Nacional para Eliminar Trámites Burocráticos",
+      "articulos_clave": "1-70 aprox.",
+      "relevancia_fiscal": "Reduce trámites fiscales-administrativos. Establece silencio administrativo positivo. Impacta tiempos de respuesta del SAT y ventanillas únicas.",
+      "url_oficial": "https://www.diputados.gob.mx/LeyesBiblio/index.htm",
+      "url_docx": "",
       "fuente": "diputados.gob.mx",
       "ultima_reforma_dof": "",
       "fecha_descarga": "",
@@ -980,6 +1060,26 @@
     },
 
     {
+      "id": "LFTR",
+      "nivel_jerarquico": 5,
+      "nivel_nombre": "Leyes con Impacto Fiscal Indirecto",
+      "clave": "LFTR",
+      "nombre_oficial": "Ley Federal de Telecomunicaciones y Radiodifusión",
+      "articulos_clave": "Caps. relevantes",
+      "relevancia_fiscal": "Servicios de telecomunicaciones: objeto del IEPS (art. 2-II-c LIEPS). Concesiones y permisos con derechos (LFD). Plataformas digitales: reglas de IVA y ISR RMF.",
+      "url_oficial": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LFTR.pdf",
+      "url_docx": "https://www.diputados.gob.mx/LeyesBiblio/doc/LFTR.docx",
+      "fuente": "diputados.gob.mx",
+      "ultima_reforma_dof": "",
+      "fecha_descarga": "",
+      "formato_descargado": "",
+      "ruta_local": "",
+      "ruta_github": "",
+      "status": "sin_iniciar",
+      "notas": ""
+    },
+
+    {
       "id": "LCM",
       "nivel_jerarquico": 5,
       "nivel_nombre": "Leyes con Impacto Fiscal Indirecto",
@@ -1029,6 +1129,86 @@
       "relevancia_fiscal": "Estructura y competencia del TFJA. Define juzgadores del juicio contencioso. Salas especializadas en materia fiscal.",
       "url_oficial": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LOTFJA.pdf",
       "url_docx": "https://www.diputados.gob.mx/LeyesBiblio/doc/LOTFJA.docx",
+      "fuente": "diputados.gob.mx",
+      "ultima_reforma_dof": "",
+      "fecha_descarga": "",
+      "formato_descargado": "",
+      "ruta_local": "",
+      "ruta_github": "",
+      "status": "sin_iniciar",
+      "notas": ""
+    },
+
+    {
+      "id": "LNotFed",
+      "nivel_jerarquico": 5,
+      "nivel_nombre": "Leyes con Impacto Fiscal Indirecto",
+      "clave": "LNotFed",
+      "nombre_oficial": "Ley del Notariado para el Distrito Federal / Ley del Notariado Federal",
+      "articulos_clave": "Arts. relevantes",
+      "relevancia_fiscal": "Fedatarios: obligaciones de información al SAT (art. 27 CFF, declaraciones notariales). ISR en enajenación de inmuebles vía notario.",
+      "url_oficial": "https://www.diputados.gob.mx/LeyesBiblio/index.htm",
+      "url_docx": "",
+      "fuente": "diputados.gob.mx",
+      "ultima_reforma_dof": "",
+      "fecha_descarga": "",
+      "formato_descargado": "",
+      "ruta_local": "",
+      "ruta_github": "",
+      "status": "sin_iniciar",
+      "notas": ""
+    },
+
+    {
+      "id": "LGSF",
+      "nivel_jerarquico": 5,
+      "nivel_nombre": "Leyes con Impacto Fiscal Indirecto",
+      "clave": "LGSF",
+      "nombre_oficial": "Ley General del Sistema Financiero (LGIF/LGAF/LSAD)",
+      "articulos_clave": "Arts. relevantes",
+      "relevancia_fiscal": "Marco de instituciones financieras auxiliares: SOFOM, SOFOL, UDIS. Régimen de intereses y retenciones ISR/IVA en operaciones financieras.",
+      "url_oficial": "https://www.diputados.gob.mx/LeyesBiblio/index.htm",
+      "url_docx": "",
+      "fuente": "diputados.gob.mx",
+      "ultima_reforma_dof": "",
+      "fecha_descarga": "",
+      "formato_descargado": "",
+      "ruta_local": "",
+      "ruta_github": "",
+      "status": "sin_iniciar",
+      "notas": ""
+    },
+
+    {
+      "id": "LGCG",
+      "nivel_jerarquico": 5,
+      "nivel_nombre": "Leyes con Impacto Fiscal Indirecto",
+      "clave": "LGCG",
+      "nombre_oficial": "Ley General de Contabilidad Gubernamental",
+      "articulos_clave": "1-89",
+      "relevancia_fiscal": "Normas de contabilidad para entes públicos: base para determinar obligaciones fiscales de entidades de gobierno que realizan actividades gravables.",
+      "url_oficial": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LGCG.pdf",
+      "url_docx": "https://www.diputados.gob.mx/LeyesBiblio/doc/LGCG.docx",
+      "fuente": "diputados.gob.mx",
+      "ultima_reforma_dof": "",
+      "fecha_descarga": "",
+      "formato_descargado": "",
+      "ruta_local": "",
+      "ruta_github": "",
+      "status": "sin_iniciar",
+      "notas": ""
+    },
+
+    {
+      "id": "LMIG",
+      "nivel_jerarquico": 5,
+      "nivel_nombre": "Leyes con Impacto Fiscal Indirecto",
+      "clave": "LMIG",
+      "nombre_oficial": "Ley de Migración",
+      "articulos_clave": "Arts. relevantes",
+      "relevancia_fiscal": "Visas de trabajo e inversión con implicaciones de residencia fiscal. SAT usa datos migratorios para verificar residencia (art. 9 CFF). Derechos de migración (LFD).",
+      "url_oficial": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LMig.pdf",
+      "url_docx": "",
       "fuente": "diputados.gob.mx",
       "ultima_reforma_dof": "",
       "fecha_descarga": "",
@@ -1377,6 +1557,26 @@
       "ruta_github": "",
       "status": "sin_iniciar",
       "notas": "Crear una entrada por cada decreto vigente relevante"
+    },
+
+    {
+      "id": "ACU-SHCP",
+      "nivel_jerarquico": 7,
+      "nivel_nombre": "Disposiciones Administrativas y Jurisprudencia",
+      "clave": "ACU-SHCP",
+      "nombre_oficial": "Acuerdos y Circulares de la SHCP en Materia Fiscal",
+      "articulos_clave": "Varios DOF",
+      "relevancia_fiscal": "Acuerdos de tipo de cambio, actualización de UMA, precios de gasolina para IEPS, cuotas de derechos. Publicados en DOF.",
+      "url_oficial": "https://dof.gob.mx",
+      "url_docx": "",
+      "fuente": "DOF",
+      "ultima_reforma_dof": "",
+      "fecha_descarga": "",
+      "formato_descargado": "",
+      "ruta_local": "",
+      "ruta_github": "",
+      "status": "sin_iniciar",
+      "notas": ""
     },
 
     {
