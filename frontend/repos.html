@@ -145,7 +145,7 @@
 <p id="status">Loading…</p>
 
 <script>
-  const GITHUB_USER = 'alfonsomp18';
+  const API_URL = 'http://localhost:8000/api/repos';
   const grid = document.getElementById('grid');
   const status = document.getElementById('status');
   const searchInput = document.getElementById('search');
@@ -185,7 +185,7 @@
     repos.forEach(repo => {
       const card = document.createElement('a');
       card.className = 'card';
-      card.href = repo.html_url;
+      card.href = repo.url;
       card.target = '_blank';
       card.rel = 'noopener noreferrer';
       card.innerHTML = `
@@ -193,7 +193,7 @@
         <div class="card-desc">${repo.description || '<em>No description</em>'}</div>
         <div class="card-meta">
           ${repo.language ? `<span class="dot" style="background:${langColor(repo.language)}"></span><span>${repo.language}</span>` : ''}
-          <span>⭐ ${repo.stargazers_count}</span>
+          <span>⭐ ${repo.stars}</span>
           <span>Updated ${timeAgo(repo.updated_at)}</span>
         </div>
       `;
@@ -208,13 +208,13 @@
 
   async function fetchRepos() {
     try {
-      const res = await fetch(`https://api.github.com/users/${GITHUB_USER}/repos?per_page=100&sort=updated`);
-      if (!res.ok) throw new Error(`GitHub API error: ${res.status}`);
+      const res = await fetch(API_URL);
+      if (!res.ok) throw new Error(`Backend error: ${res.status}`);
       allRepos = await res.json();
       status.style.display = 'none';
       renderRepos(allRepos);
     } catch (err) {
-      status.textContent = `Failed to load repos: ${err.message}`;
+      status.textContent = `Failed to load repos: ${err.message}. Make sure the backend is running (uvicorn main:app).`;
     }
   }
 
