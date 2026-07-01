@@ -153,6 +153,20 @@
 
   let allRepos = [];
 
+  function esc(str) {
+    const d = document.createElement('div');
+    d.textContent = str ?? '';
+    return d.innerHTML;
+  }
+
+  function safeUrl(raw) {
+    try {
+      const u = new URL(raw);
+      if (u.protocol === 'https:' && u.hostname === 'github.com') return raw;
+    } catch (_) {}
+    return '#';
+  }
+
   function timeAgo(iso) {
     const diff = Date.now() - new Date(iso);
     const d = Math.floor(diff / 86400000);
@@ -185,16 +199,16 @@
     repos.forEach(repo => {
       const card = document.createElement('a');
       card.className = 'card';
-      card.href = repo.url;
+      card.href = safeUrl(repo.url);
       card.target = '_blank';
       card.rel = 'noopener noreferrer';
       card.innerHTML = `
-        <div class="card-name">${repoIcon()} ${repo.name}</div>
-        <div class="card-desc">${repo.description || '<em>No description</em>'}</div>
+        <div class="card-name">${repoIcon()} ${esc(repo.name)}</div>
+        <div class="card-desc">${repo.description ? esc(repo.description) : '<em>No description</em>'}</div>
         <div class="card-meta">
-          ${repo.language ? `<span class="dot" style="background:${langColor(repo.language)}"></span><span>${repo.language}</span>` : ''}
-          <span>⭐ ${repo.stars}</span>
-          <span>Updated ${timeAgo(repo.updated_at)}</span>
+          ${repo.language ? `<span class="dot" style="background:${langColor(repo.language)}"></span><span>${esc(repo.language)}</span>` : ''}
+          <span>⭐ ${esc(String(repo.stars))}</span>
+          <span>Updated ${esc(timeAgo(repo.updated_at))}</span>
         </div>
       `;
       grid.appendChild(card);

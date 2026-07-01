@@ -5,15 +5,20 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="GitHub Repos API")
 
+ALLOWED_ORIGINS = os.getenv(
+    "ALLOWED_ORIGINS", "http://localhost,http://127.0.0.1,null"
+).split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_methods=["GET"],
-    allow_headers=["*"],
+    allow_headers=["Accept"],
 )
 
 GITHUB_USER = os.getenv("GITHUB_USER", "alfonsomp18")
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", "")  # optional — avoids rate limits
+GITHUB_API_TIMEOUT = 10  # seconds
 
 
 @app.get("/api/repos")
@@ -22,12 +27,15 @@ async def get_repos():
     if GITHUB_TOKEN:
         headers["Authorization"] = f"Bearer {GITHUB_TOKEN}"
 
-    async with httpx.AsyncClient() as client:
-        resp = await client.get(
-            f"https://api.github.com/users/{GITHUB_USER}/repos",
-            params={"per_page": 100, "sort": "updated"},
-            headers=headers,
-        )
+    try:
+        async with httpx.AsyncClient(timeout=GITHUB_API_TIMEOUT) as client:
+            resp = await client.get(
+                f"https://api.github.com/users/{GITHUB_USER}/repos",
+                params={"per_page": 100, "sort": "updated"},
+                headers=headers,
+            )
+    except httpx.TimeoutException:
+        raise HTTPException(status_code=504, detail="GitHub API timed out")
 
     if resp.status_code != 200:
         raise HTTPException(status_code=resp.status_code, detail="GitHub API error")
